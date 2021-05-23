@@ -1,11 +1,14 @@
 import QRCode from 'qrcode'
-import React, {useState} from 'react'
+import React, {useState, useRef} from 'react'
+import QrReader from 'react-qr-reader'
 import {Container, Grid, Card, CardContent, makeStyles, TextField, Button} from '@material-ui/core'
 function App() {
   const classes = useStyle();
 
   const [text, setText] = useState('')
   const [imageUrl, setImageUrl] = useState('')
+  const [scanResultFile, setScanResultFile] = useState('');
+  const qrRef = useRef(null)
 
 const generateQRCode = async () =>{
   try {
@@ -17,6 +20,19 @@ const generateQRCode = async () =>{
   }
 }
 
+const handleErrorFile = (error) => {
+  console.error(error)
+}
+
+const handleScanFile = (result) =>{
+  if(result){
+    setScanResultFile(result)
+  }
+}
+
+const onScanFile = () =>{
+  qrRef.current.openImageDialog();
+}
   return (
      <Container className={classes.useStyle}>
        <Card>
@@ -29,9 +45,13 @@ const generateQRCode = async () =>{
                 <br/>
                 <br/>
                 <br/>
-                {imageUrl ?(<img src={imageUrl} alt='img'/>) : null}
+                {imageUrl ?(<a href={imageUrl} download><img src={imageUrl} alt='img'/></a>) : null}
              </Grid>
-             <Grid item xl={4} lg={4} md={6} sm={12} xs={12}></Grid>
+             <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
+               <Button className={classes.btn} variant="contained" color="secondary" onClick={onScanFile} >Scan QR code</Button>
+               <QrReader ref={qrRef} delay={300} style={{width: '100%'}} onError={handleErrorFile} onScan={handleScanFile} legacyMode />
+               <h3>Scanned code: {scanResultFile}</h3>
+             </Grid>
              <Grid item xl={4} lg={4} md={6} sm={12} xs={12}></Grid>
            </Grid>
          </CardContent>
