@@ -8,6 +8,7 @@ function App() {
   const [text, setText] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [scanResultFile, setScanResultFile] = useState('');
+  const [scanResultWebCam, setScanWebCam] = useState('');
   const qrRef = useRef(null)
 
 const generateQRCode = async () =>{
@@ -33,6 +34,16 @@ const handleScanFile = (result) =>{
 const onScanFile = () =>{
   qrRef.current.openImageDialog();
 }
+
+const handleErrorWebCam = (error) => {
+  console.error(error)
+}
+
+const handleScanWebCam = (result) => {
+  if(result) {
+    setScanWebCam(result)
+  }
+}
   return (
      <Container className={classes.useStyle}>
        <Card>
@@ -52,7 +63,11 @@ const onScanFile = () =>{
                <QrReader ref={qrRef} delay={300} style={{width: '100%'}} onError={handleErrorFile} onScan={handleScanFile} legacyMode />
                <h3>Scanned code: {scanResultFile}</h3>
              </Grid>
-             <Grid item xl={4} lg={4} md={6} sm={12} xs={12}></Grid>
+             <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
+               <h3>QR code scanned by web cam:</h3>
+               <QrReader delay={300} style={{width: '100%'}} onError={handleErrorWebCam}  onScan={handleScanWebCam}/>
+               <h3>Scanned by WebCam: {scanResultWebCam}</h3>
+             </Grid>
            </Grid>
          </CardContent>
        </Card>
