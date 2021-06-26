@@ -51,7 +51,7 @@ const handleScanWebCam = (result) => {
          <CardContent>
            <Grid container spacing={2}>
              <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
-               <TextField label="Enter the text"onChange={(e) => setText(e.target.value)} />
+               <TextField label="Enter the text" onChange={(e) => setText(e.target.value)} />
                <Button className={classes.btn} variant="contained" color="primary" onClick={() => generateQRCode()}>Generate</Button>
                 <br/>
                 <br/>
